@@ -14,7 +14,7 @@ class AddNewPriceToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->integer('new_price')->after('price');
+            $table->integer('new_price')->after('price')->nullable();
         });
     }
 
