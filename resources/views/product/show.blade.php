@@ -37,17 +37,17 @@
 	<div class="product_details">
 		<div class="container">
 			<div class="row details_row">
-               <-- Для отображения картинок используем связь один ко многим -->
-               <-- Если у продукта есть приввязанные изображения, записываем первое изображение в переменную-->
-               <-- Если нет в переменной будет изображение заглушки-->
+               <!-- Для отображения картинок используем связь один ко многим -->
+               <!-- Если у продукта есть приввязанные изображения, записываем первое изображение в переменную-->
+               <!-- Если нет в переменной будет изображение заглушки-->
 			@php
                 $firstImage = 'no_image.jpeg';
                 if(count($product->images) > 0){
                 $firstImage = $product->images[0]['img'];
-                $images = $product->images;
+
             };
             @endphp
-            <-- Если есть заглушка то показываем только ее-->
+            <!-- Если есть заглушка то показываем только ее-->
             @if($firstImage == 'no_image.jpeg')
                 <!-- Product Image -->
 				<div class="col-lg-6">
@@ -60,7 +60,8 @@
 						</div>
 					</div>
 				</div>
-	        <-- Если заглушки нет делаем активным первое изображение -->
+
+	        <!-- Если заглушки нет делаем активным первое изображение -->
             @else
 				<!-- Product Image -->
 				<div class="col-lg-6">
@@ -73,18 +74,17 @@
 						</div>
 						<div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
 
-							<div class="details_image_thumbnail active" data-image="/images/{{$firstImage}}">
-							    <img src="/images/{{$firstImage}}" alt="">
-							</div>
-                            <-- по остальным пробегаемся циклом-->
-                            <-- и отображаем превьюшки для выбора,-->
-                            <--цикл начинается со второго жллемента массива-->
-							@for ($i = 1; $i < count($images); $i++)
-							    <div class="details_image_thumbnail" data-image="/images/{{$images[$i]['img']}}">
-                                    <img src="/images/{{$images[$i]['img']}}" alt="">
-                                </div>
-							@endfor
-
+							@foreach($product->images as $image)
+                                 @if($loop->first)
+                                     <div class="details_image_thumbnail active" data-image="/images/{{$image['img']}}">
+                                        <img src="/images/{{$image['img']}}" alt="">
+                                     </div>
+                                 @else
+                                     <div class="details_image_thumbnail" data-image="/images/{{$image['img']}}">
+                                         <img src="/images/{{$image['img']}}" alt="">
+                                     </div>
+                                 @endif
+							@endforeach
 						</div>
 					</div>
 				</div>
