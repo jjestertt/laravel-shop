@@ -14,7 +14,7 @@ class ProductsSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 1; $i < 20; $i++)
+        for ($i = 1; $i <= 20; $i++)
             DB::table('products')->insert([
                 'title' => 'Title' . $i,
                 'price' => rand(200, 1500),
