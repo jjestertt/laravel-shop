@@ -64,7 +64,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col product_col">
 
                     <div class="product_grid">
 
@@ -106,15 +106,11 @@
                                 </div>
                             </div>
                         @endforeach
-
                     </div>
-                    <div class="product_pagination">
-                        <ul>
-                            <li class="active"><a href="#">01.</a></li>
-                            <li><a href="#">02.</a></li>
-                            <li><a href="#">03.</a></li>
-                        </ul>
-                    </div>
+                    {{--выводим стандартную Laravel пагинацию на экран
+                    чтобы при переключении пагинации не слетала сортировка перед
+                    links включаем метод сохранения адреса--}}
+                    {{ $products->links('ui.paginate.index') }}
 
                 </div>
             </div>
@@ -202,10 +198,10 @@
     {{--скрипт отвечает за сортировку и правильное отображение сетки--}}
     <script>
         const productSortingBtn = document.querySelectorAll('.product_sorting_btn');
-        const productGrid = document.querySelector('.product_grid');
         const sortingText = document.querySelector('.sorting_text');
+        const productCol = document.querySelector('.product_col');
 
-        const sortBy = async (btn, ) => {
+        const sortBy = async (btn) => {
             const response = await fetch("{{route('showCategory', $category->alias)}}", {
                 method: 'POST',
                 headers: {
@@ -216,24 +212,30 @@
                 },
                 //Обязательно указывать метод который преобразует обьект в строку!!!
                 body: JSON.stringify({
-                    orderBy: btn.dataset.order,
+                    orderBy: btn.dataset.order, //инфа как нужно сортировать
+                    //Если в адресной строке есть get page необходимо его сохранить если нет то страница по умолчанию 1
+                    page: {{isset($_GET['page']) ? $_GET['page'] : 1}},
                 }),
             });
-            //С сервера к нам приходит разметка
+
+            //С сервера к нам приходит разметка и рендер пагинации уже с query параметрами
             const view = await response.text();
             //Рендерим ее без перезагрузки
-            productGrid.innerHTML = view;
+            productCol.innerHTML = view;
             //И меняем текст в инпуте сортировки
             sortingText.innerText = btn.innerText
 
-
-            //И поменяем адрессную строку
+            //помещаем get параметры orderBy и page(если есть) в адрессную строку
             const positionParamertr = location.pathname.indexOf('?');
             const url = location.pathname.substring(positionParamertr, location.pathname.length);
-            let newUrl = url + '?orderBy=' + btn.dataset.order;
+            let newUrl = url + '?';
+            newUrl += 'orderBy=' + btn.dataset.order + "&page=" + {{isset($_GET['page']) ? $_GET['page'] : 1}};
             window.history.pushState({}, '', newUrl);
 
-            // сброс настроек сетки чтобы ничего не ломалось
+
+            //Дальше находим отрендереную сетку и правильно ее выстраиваем
+            const productGrid = document.querySelector('.product_grid');
+            // сброс настроек сетки
             let iso = new Isotope(productGrid, 'destroy');
             //С помощью плагина ждем пока загрузятся все изображения, и строи сетку
             imagesLoaded(productGrid, function (instance) {
@@ -248,14 +250,12 @@
                 );
             });
         }
-        //отлавливаем клик по кнопке
-        productSortingBtn.forEach(btn => {
-            btn.addEventListener('click', () => {
-                sortBy(btn)
+            //отлавливаем клик по кнопке и передаем в функцию кнопку
+            productSortingBtn.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    sortBy(btn)
+                });
             });
-        });
-
-
     </script>
 
 @endsection

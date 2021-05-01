@@ -25,37 +25,36 @@ class ProductController extends Controller
         //Получаем нужную нам категорию из обязательного параметра в адрессной строке
         $category = ProductCategory::where('alias', $category_alias)->first();
 
-        $products = Product::where('product_categories_id', $category->id)->get();
+        //Количество символов пагинации
+        $paginate = 3;
+
+        $products = Product::where('product_categories_id', $category->id)->paginate($paginate);
 
         //Проверяем есть ли в запросе данные о сортировке
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'price-low-high') {
                 $products = Product::where('product_categories_id', $category->id)
-                    ->orderBy('price')
-                    ->get();
+                    ->orderBy('price')->paginate($paginate);
             }
             if ($request->orderBy == 'price-high-low') {
                 $products = Product::where('product_categories_id', $category->id)
-                    ->orderBy('price', 'DESC')
-                    ->get();
+                    ->orderBy('price', 'DESC')->paginate($paginate);
             }
             if ($request->orderBy == 'name-a-z') {
                 $products = Product::where('product_categories_id', $category->id)
-                    ->orderBy('title')
-                    ->get();
+                    ->orderBy('title')->paginate($paginate);
             }
             if ($request->orderBy == 'name-z-a') {
                 $products = Product::where('product_categories_id', $category->id)
-                    ->orderBy('title', 'DESC')
-                    ->get();
+                    ->orderBy('title', 'DESC')->paginate($paginate);
             }
         }
 
         //Если есть аякс запрос тогда мы можем отправить готовую разметку на фронтенд
         if ($request->ajax()) {
-            return view('ajax.order-by', ['products' => $products])->render();
+            return (view('ajax.order-by', ['products' => $products, 'params' => $request->all()])->render());
         }
-
+//        dd($request->all());
         return (view('categories.index', ['req' => $request, 'category' => $category, 'products' => $products]));
     }
 }
