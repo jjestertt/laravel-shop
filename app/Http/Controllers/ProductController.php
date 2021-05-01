@@ -26,7 +26,7 @@ class ProductController extends Controller
         $category = ProductCategory::where('alias', $category_alias)->first();
 
         //Количество символов пагинации
-        $paginate = 3;
+        $paginate = 8;
 
         $products = Product::where('product_categories_id', $category->id)->paginate($paginate);
 
