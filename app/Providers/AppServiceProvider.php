@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\ProductCategory;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        //Добавляем категории для общего использования всем вьюхами
+        $categories = ProductCategory::orderBy('id')->get();
+        View::share(['categories' => $categories]);
     }
 }

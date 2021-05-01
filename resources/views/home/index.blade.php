@@ -147,6 +147,7 @@
                     <div class="product_grid">
 
                     @foreach($products as $product)
+
                         @php
                             $image = 'no_image.jpeg';
                             if(count($product->images) > 0){
@@ -156,8 +157,17 @@
 
                         <!-- Product -->
                             <div class="product">
-                                <div class="product_image"><img src="images/{{$image}}" alt=""></div>
-                                <div class="product_extra product_new"><a href="categories.html">New</a></div>
+                                <div class="product_image">
+                                    <a href="{{route('showProduct', ['category', $product->id])}}">
+                                        <img src="images/{{$image}}" alt="">
+                                    </a>
+                                </div>
+                                <div class="product_extra product_new">
+
+                                    <a href="{{route('showCategory', $product->categories['alias'])}}">
+                                        {{$product->categories['title']}}
+                                    </a>
+                                </div>
                                 <div class="product_content">
                                     <div class="product_title">
                                         <a href="{{route('showProduct', ['category', $product->id])}}">

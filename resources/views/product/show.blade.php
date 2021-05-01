@@ -11,7 +11,6 @@
     <script src="/js/product.js"></script>
 @endsection
 
-
 @section('content')
 <!-- Home -->
 	<div class="home">

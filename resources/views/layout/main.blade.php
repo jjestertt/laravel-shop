@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Sublime project">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="/styles/bootstrap4/bootstrap.min.css">
     <link href="/plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="/plugins/OwlCarousel2-2.2.1/owl.carousel.css">
@@ -43,11 +44,12 @@
                                     <li class="hassubs">
                                         <a href="categories.html">Categories</a>
                                         <ul>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
-                                            <li><a href="categories.html">Category</a></li>
+                                            @foreach($categories as $category)
+                                                <li>
+                                                    <a href="{{route('showCategory', $category->alias)}}">{{$category->title}}</a>
+                                                </li>
+                                            @endforeach
+
                                         </ul>
                                     </li>
                                     <li><a href="#">Accessories</a></li>
@@ -58,8 +60,10 @@
                             <div class="header_extra ml-auto">
                                 <div class="shopping_cart">
                                     <a href="cart.html">
-                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                             viewBox="0 0 489 489" style="enable-background:new 0 0 489 489;" xml:space="preserve">
+                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 489 489" style="enable-background:new 0 0 489 489;"
+                                             xml:space="preserve">
 											<g>
                                                 <path d="M440.1,422.7l-28-315.3c-0.6-7-6.5-12.3-13.4-12.3h-57.6C340.3,42.5,297.3,0,244.5,0s-95.8,42.5-96.6,95.1H90.3
 													c-7,0-12.8,5.3-13.4,12.3l-28,315.3c0,0.4-0.1,0.8-0.1,1.2c0,35.9,32.9,65.1,73.4,65.1h244.6c40.5,0,73.4-29.2,73.4-65.1
@@ -73,8 +77,10 @@
                                 </div>
                                 <div class="search">
                                     <div class="search_icon">
-                                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                             viewBox="0 0 475.084 475.084" style="enable-background:new 0 0 475.084 475.084;"
+                                        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                             viewBox="0 0 475.084 475.084"
+                                             style="enable-background:new 0 0 475.084 475.084;"
                                              xml:space="preserve">
 										<g>
                                             <path d="M464.524,412.846l-97.929-97.925c23.6-34.068,35.406-72.047,35.406-113.917c0-27.218-5.284-53.249-15.852-78.087
@@ -134,32 +140,44 @@
 
                 <div class="page_menu_search menu_mm">
                     <form action="#">
-                        <input type="search" required="required" class="page_menu_search_input menu_mm" placeholder="Search for products...">
+                        <input type="search" required="required" class="page_menu_search_input menu_mm"
+                               placeholder="Search for products...">
                     </form>
                 </div>
                 <ul class="page_menu_nav menu_mm">
                     <li class="page_menu_item has-children menu_mm">
                         <a href="index.html">Home<i class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Categories<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="product.html">Product<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="cart.html">Cart<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="checkout.html">Checkout<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Categories<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="product.html">Product<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="cart.html">Cart<i class="fa fa-angle-down"></i></a>
+                            </li>
+                            <li class="page_menu_item menu_mm"><a href="checkout.html">Checkout<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i
+                                        class="fa fa-angle-down"></i></a></li>
                         </ul>
                     </li>
                     <li class="page_menu_item has-children menu_mm">
                         <a href="categories.html">Categories<i class="fa fa-angle-down"></i></a>
                         <ul class="page_menu_selection menu_mm">
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
-                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                                        class="fa fa-angle-down"></i></a></li>
+                            <li class="page_menu_item menu_mm"><a href="categories.html">Category<i
+                                        class="fa fa-angle-down"></i></a></li>
                         </ul>
                     </li>
-                    <li class="page_menu_item menu_mm"><a href="index.html">Accessories<i class="fa fa-angle-down"></i></a></li>
+                    <li class="page_menu_item menu_mm"><a href="index.html">Accessories<i class="fa fa-angle-down"></i></a>
+                    </li>
                     <li class="page_menu_item menu_mm"><a href="#">Offers<i class="fa fa-angle-down"></i></a></li>
-                    <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i class="fa fa-angle-down"></i></a></li>
+                    <li class="page_menu_item menu_mm"><a href="contact.html">Contact<i
+                                class="fa fa-angle-down"></i></a></li>
                 </ul>
             </div>
         </div>
@@ -176,34 +194,39 @@
         </div>
     </div>
 
-    @yield('content')
+@yield('content')
 
 <!-- Footer -->
 
-<div class="footer_overlay"></div>
-<footer class="footer">
-    <div class="footer_background" style="background-image:url(images/footer.jpg)"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="footer_content d-flex flex-lg-row flex-column align-items-center justify-content-lg-start justify-content-center">
-                    <div class="footer_logo"><a href="#">Sublime.</a></div>
-                    <div class="copyright ml-auto mr-auto"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                        <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
-                    <div class="footer_social ml-lg-auto">
-                        <ul>
-                            <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        </ul>
+    <div class="footer_overlay"></div>
+    <footer class="footer">
+        <div class="footer_background" style="background-image:url(images/footer.jpg)"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div
+                        class="footer_content d-flex flex-lg-row flex-column align-items-center justify-content-lg-start justify-content-center">
+                        <div class="footer_logo"><a href="#">Sublime.</a></div>
+                        <div class="copyright ml-auto mr-auto">
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                            Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                            All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                                                                aria-hidden="true"></i> by <a
+                                href="https://colorlib.com" target="_blank">Colorlib</a>
+                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></div>
+                        <div class="footer_social ml-lg-auto">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 </div>
 
 <script src="/js/jquery-3.2.1.min.js"></script>
